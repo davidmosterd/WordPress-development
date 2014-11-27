@@ -1,0 +1,10 @@
+# WordPress
+wp-config.php
+wp-content/uploads
+wp-content/upgrade
+sitemap.xml
+.htaccess
+
+# Development
+vendor
+node_modules

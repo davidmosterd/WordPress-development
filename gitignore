@@ -1,0 +1,28 @@
+#! /bin/bash
+
+function create
+{
+    > .gitignore
+}
+
+# end file with \n
+function append
+{
+    path=$(dirname $0)
+	cat "$path/gitignore.d/$1" >> .gitignore
+}
+
+case "$1" in
+	osx)
+        create
+        append osx
+        ;;
+    wp)
+        create
+        append osx
+        append wp
+        ;;
+    *)
+        echo "Usage: " `basename $0` " osx|wp"
+        ;;
+esac

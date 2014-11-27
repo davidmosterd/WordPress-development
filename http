@@ -1,0 +1,31 @@
+#! /bin/bash
+
+function start
+{
+    sudo /usr/local/sbin/php-fpm;
+    sudo nginx;
+    mysql.server start;
+}
+
+function stop
+{
+    sudo /usr/bin/killall -c php-fpm;
+    sudo nginx -s stop;
+    mysql.server stop;
+}
+
+case "$1" in
+	start)
+		start;
+		;;
+	stop)
+		stop;
+		;;
+	restart)
+		stop;
+		start;
+		;;
+	*)
+		echo "Usage: http {start|stop|restart}";
+		;;
+esac

@@ -1,0 +1,61 @@
+#! /bin/bash
+
+function usage
+{
+cat << EOF
+usage: $(basename $0) [-g] directory
+
+Extract https://wordpress.org/latest.tar.gz to target directory.
+
+Options:
+   -g (create Git repository with WordPress .gitignore)
+EOF
+}
+
+OPT_GIT=0
+OPT_DIR=$BASH_ARGV
+
+while getopts "d:g" OPTION
+do
+     case $OPTION in
+         g)
+             OPT_GIT=1
+             ;;
+         ?)
+             usage
+             exit
+             ;;
+     esac
+done
+
+if [ ! $OPT_DIR ]; then
+    usage
+    exit
+fi
+
+if [ -d $OPT_DIR ]; then
+    echo "error: directory $OPT_DIR already exists"
+    exit 0
+fi
+
+# make directory
+mkdir $OPT_DIR
+cd $OPT_DIR
+
+echo "Downloading https://wordpress.org/latest.tar.gz"
+
+# get latest WordPress
+curl -# -o ./latest.tar.gz https://wordpress.org/latest.tar.gz
+tar xzf latest.tar.gz
+mv wordpress/* ./
+rm -f -r wordpress latest.tar.gz
+
+# setup Git
+if [ $OPT_GIT -eq 1 ]; then
+	echo "creating Git repository"
+
+	gitignore wp
+	git init -q
+fi
+
+echo -e "\ndone"
